@@ -18,6 +18,10 @@ var initCmd = &cobra.Command{
 		err := os.Mkdir(".rite", 0755)
 		helper.CheckErr(err)
 
+		// Create the 'keys' folder inside '.rite' directory
+		err = os.Mkdir(".rite/keys", 0755)
+		helper.CheckErr(err)
+
 		// Create the 'rite.config.yaml' file inside the '.rite' folder
 		d1 := []byte(data.DefaultStarterFile)
 		err = os.WriteFile(".rite/rite.config.yaml", d1, 0644)
