@@ -18,9 +18,21 @@ var initCmd = &cobra.Command{
 		err := os.Mkdir(".rite", 0755)
 		helper.CheckErr(err)
 
+		// Create the 'rite.config.yaml' file inside the '.rite' folder
 		d1 := []byte(data.DefaultStarterFile)
 		err = os.WriteFile(".rite/rite.config.yaml", d1, 0644)
 		helper.CheckErr(err)
+
+		// If the file doesn't exist, create it, or append to the file
+		f, err := os.OpenFile(".gitignore",
+			os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			helper.CheckErr(err)
+		}
+		defer f.Close()
+		if _, err := f.WriteString("\n\n# Ignore the private gpg file\n*.private.gpg"); err != nil {
+			helper.CheckErr(err)
+		}
 
 	},
 }

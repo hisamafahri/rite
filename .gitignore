@@ -1,1 +1,4 @@
 .rite
+
+# Ignore the private gpg file
+*.private.gpg
