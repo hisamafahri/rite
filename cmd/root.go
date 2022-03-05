@@ -26,6 +26,9 @@ func init() {
 	// add the 'version' or 'v' command
 	rootCmd.AddCommand(versionCmd)
 
+	// add the 'generate' or 'g' command
+	rootCmd.AddCommand(generateCmd)
+
 	// add the 'version' command
 	rootCmd.AddCommand(initCmd)
 }
