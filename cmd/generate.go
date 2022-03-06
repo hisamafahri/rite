@@ -22,11 +22,9 @@ var generateCmd = &cobra.Command{
 
 		_, err = key.Armor()
 		helper.CheckErr(err)
-		// fmt.Printf("%s\n", pub)
 
 		_, err = key.ArmorPrivate(&config)
 		helper.CheckErr(err)
-		// fmt.Printf("%s\n", priv)
 
 		ioutil.WriteFile(".rite/keys/joe.example.com.public.gpg", key.Keyring(), 0666)
 		ioutil.WriteFile("joe.example.com.private.gpg", key.Secring(&config), 0666)
