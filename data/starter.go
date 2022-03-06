@@ -19,6 +19,10 @@ groups:
 
 # list of users and its incorporated group
 users:
-  user1@email.com: ['dev']
-  user2@email.com: ['dev', prod]
+  dev:
+    - 'user1@gmail.com'
+  staging:
+    - 'user1@gmail.com'
+  prod:
+    - 'user1@gmail.com'
 `

@@ -6,6 +6,7 @@ require (
 	github.com/ProtonMail/go-crypto v0.0.0-20220113124808-70ae35bab23f
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -24,5 +25,4 @@ require (
 	golang.org/x/sys v0.0.0-20211210111614-af8b64212486 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/ini.v1 v1.66.2 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
