@@ -6,9 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// group flag variable for 'add-user' command
-var Group string
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "rite",
@@ -29,14 +26,8 @@ func init() {
 	// add the 'version' or 'v' command
 	rootCmd.AddCommand(versionCmd)
 
-	// add the 'generate' or 'g' command
-	rootCmd.AddCommand(generateCmd)
-
-	// add the 'add-user' command
-	// and '--group' flag
+	// add the 'add' command
 	rootCmd.AddCommand(addUserCmd)
-	addUserCmd.PersistentFlags().StringVarP(&Group, "group", "g", "", "Group the new user should be in. Separated with comma (,).")
-	addUserCmd.MarkPersistentFlagRequired("group")
 
 	// add the 'version' command
 	rootCmd.AddCommand(initCmd)
