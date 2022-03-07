@@ -1,12 +1,17 @@
 package cmd
 
 import (
-	"fmt"
+	"errors"
+	"io/ioutil"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/hisamafahri/rite/helper"
 	"github.com/hisamafahri/rite/model"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // addUser command will add a user to specific group
@@ -39,82 +44,71 @@ var addUserCmd = &cobra.Command{
 		err = survey.Ask(model.AddUserPrompt(groupChoices), &userDetails)
 		helper.CheckErr(err)
 
-		fmt.Printf("name: %s\n", userDetails.FullName)
-		fmt.Printf("email: %s\n", userDetails.Email)
-		fmt.Printf("password: %s\n", userDetails.Password)
-		fmt.Printf("groups: %s\n", userDetails.SelectedGroups)
-		fmt.Printf("expire: %s\n", userDetails.Expiration)
+		expirationLength, err := strconv.Atoi(userDetails.Expiration)
+		helper.CheckErr(err)
 
-		// // Set the expiration
-		// config := helper.Config{Expiry: 365 * 24 * time.Hour}
+		// Set the expiration
+		expiration := helper.Config{Expiry: time.Duration(expirationLength) * 24 * time.Hour}
 
-		// // create new key
-		// key, err := helper.CreateKey("Joe Smith", "test key", "joe@example.com", &config)
-		// helper.CheckErr(err)
+		// create new key
+		key, err := helper.CreateKey(userDetails.FullName, userDetails.Password, userDetails.Email, &expiration)
+		helper.CheckErr(err)
 
-		// // armoring public key
-		// _, err = key.Armor()
-		// helper.CheckErr(err)
+		// armoring public key
+		_, err = key.Armor()
+		helper.CheckErr(err)
 
-		// // armoring private key
-		// _, err = key.ArmorPrivate(&config)
-		// helper.CheckErr(err)
+		// armoring private key
+		_, err = key.ArmorPrivate(&expiration)
+		helper.CheckErr(err)
 
-		// // save the public and private key to a .pgp file
-		// ioutil.WriteFile(".rite/keys/joe.example.com.public.gpg", key.Keyring(), 0666)
-		// ioutil.WriteFile("joe.example.com.private.gpg", key.Secring(&config), 0666)
+		// save the public and private key to a .pgp file
+		ioutil.WriteFile(".rite/keys/"+strings.Replace(userDetails.Email, "@", ".", -1)+".public.gpg", key.Keyring(), 0666)
+		ioutil.WriteFile(strings.Replace(userDetails.Email, "@", ".", -1)+".private.gpg", key.Secring(&expiration), 0666)
 
-		// // get the new email value
-		// newEmail := strings.Join(args, " ")
+		// ====================
 
-		// // get the '--group' flag value
-		// groupFlag, _ := cmd.Flags().GetString("group")
+		for _, selectedGroup := range userDetails.SelectedGroups {
+			// Read the config file
+			config, err := helper.LoadConfig()
+			helper.CheckErr(err)
 
-		// // remove all spaces
-		// groupFlag = strings.ReplaceAll(groupFlag, " ", "")
+			// load users from config
+			users := config.Users
 
-		// // split the groupFlag into slice
-		// designatedGroups := strings.Split(groupFlag, ",")
+			// // check if group exist in config file
+			groupMembers, isGroupExist := users[selectedGroup]
 
-		// for _, designatedGroup := range designatedGroups {
-		// // Read the config file
-		// config, err := helper.LoadConfig()
-		// helper.CheckErr(err)
+			// TODO: Fix error when group member empty
 
-		// // load users from config
-		// users := config.Users
+			// return error if group doesn't exist
+			if !isGroupExist {
+				helper.CheckErr(errors.New("rite: group " + selectedGroup + " doesn't exist in the 'users' section of the .rite/config.rite.yaml file"))
+				return
+			}
 
-		// 	// check if group exist in config file
-		// 	groupMembers, isGroupExist := users[designatedGroup]
+			// convert groupMembers into []interface{}
+			groupMembersSlice := groupMembers.([]interface{})
 
-		// 	// return error if group doesn't exist
-		// 	if !isGroupExist {
-		// 		helper.CheckErr(errors.New("rite: group " + designatedGroup + " doesn't exist in the .rite/config.rite.yaml file"))
-		// 		return
-		// 	}
+			// append new email to the groupMembersSlice
+			groupMembers = append([]interface{}{userDetails.Email}, groupMembersSlice...)
 
-		// 	// convert groupMembers into []interface{}
-		// 	groupMembersSlice := groupMembers.([]interface{})
+			for groupName := range users {
+				// fmt.Println("Received ID:", v, "index: ", i)
+				newMembers := groupMembers
+				if groupName == selectedGroup {
+					users[selectedGroup] = newMembers
+				}
+			}
 
-		// 	// append new email to the groupMembersSlice
-		// 	groupMembers = append([]interface{}{newEmail}, groupMembersSlice...)
+			// rewrite the config file
+			viper.Set("users", users)
 
-		// 	for groupName := range users {
-		// 		// fmt.Println("Received ID:", v, "index: ", i)
-		// 		newMembers := groupMembers
-		// 		if groupName == designatedGroup {
-		// 			users[designatedGroup] = newMembers
-		// 		}
-		// 	}
+			err = viper.WriteConfig()
+			helper.CheckErr(err)
 
-		// 	// rewrite the config file
-		// 	viper.Set("users", users)
-
-		// 	err = viper.WriteConfig()
-		// 	helper.CheckErr(err)
-
-		// 	err = viper.WriteConfig()
-		// 	helper.CheckErr(err)
-		// }
+			err = viper.WriteConfig()
+			helper.CheckErr(err)
+		}
 	},
 }
