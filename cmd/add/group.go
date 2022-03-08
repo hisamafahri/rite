@@ -27,7 +27,13 @@ func addGroup() {
 	// load users from config
 	groups := config.Groups
 
-	_, isGroupNameExist := groups[groupDetails.Name]
+	var isGroupNameExist bool
+
+	if len(groups) == 0 {
+		groups = make(map[string]interface{})
+	} else {
+		_, isGroupNameExist = groups[groupDetails.Name]
+	}
 
 	if isGroupNameExist {
 		fmt.Println(errors.New("rite: group '" + groupDetails.Name + "' already exist"))

@@ -22,8 +22,8 @@ var initCmd = &cobra.Command{
 		helper.CheckErr(err)
 
 		// Create the 'rite.config.yaml' file inside the '.rite' folder
-		d1 := []byte(`groups:
-users:`)
+		d1 := []byte(`groups: ~
+users: ~`)
 		err = os.WriteFile(".rite/rite.config.yaml", d1, 0644)
 		helper.CheckErr(err)
 
