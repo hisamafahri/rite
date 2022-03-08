@@ -69,18 +69,26 @@ var addUserCmd = &cobra.Command{
 			// load users from config
 			users := config.Users
 
-			// check if group exist in config file
-			currentMembers, isGroupHasMembers := users[selectedGroup]
-
-			var groupMembers interface{}
 			var tempMembersSlice []string
+			var currentMembers interface{}
+			var isGroupHasMembers bool
 
-			// if group name is not exist or have no member in the 'users' section
+			// check if group listed in 'users:'
+			if len(users) == 0 {
+				users = make(map[string]interface{})
+				currentMembers = users[selectedGroup]
+				isGroupHasMembers = false
+			} else {
+				currentMembers, isGroupHasMembers = users[selectedGroup]
+			}
+
+			// if group have no member in the 'users' section
 			// create an empty string, and append on it
 			if !isGroupHasMembers {
 				tempMembersSlice = append(tempMembersSlice, userDetails.Email)
 				users[selectedGroup] = tempMembersSlice
 			} else {
+				var groupMembers interface{}
 				groupMembers = currentMembers
 				// convert groupMembers into []interface{}
 				groupMembersSlice := currentMembers.([]interface{})
