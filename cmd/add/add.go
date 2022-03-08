@@ -1,8 +1,6 @@
 package add
 
 import (
-	"fmt"
-
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/hisamafahri/rite/helper"
 	"github.com/hisamafahri/rite/model"
@@ -25,7 +23,7 @@ var AddCmd = &cobra.Command{
 		if addType.Type == "New Group" {
 			addGroup()
 		} else if addType.Type == "New Files" {
-			fmt.Println("new Files")
+			addFile()
 		} else if addType.Type == "New User" {
 			addUser()
 		}
