@@ -5,7 +5,7 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/hisamafahri/rite/helper"
-	"github.com/hisamafahri/rite/model"
+	prompt "github.com/hisamafahri/rite/prompt/remove"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +19,7 @@ var RemoveCmd = &cobra.Command{
 		}{}
 
 		// perform the questions
-		err := survey.Ask(model.RemovePrompt(), &removeType)
+		err := survey.Ask(prompt.RemovePrompt(), &removeType)
 		helper.CheckErr(err)
 
 		if removeType.Type == "A Group" {

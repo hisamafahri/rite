@@ -1,4 +1,4 @@
-package model
+package prompt
 
 import (
 	"path/filepath"
@@ -7,8 +7,13 @@ import (
 )
 
 // the questions to ask
-func AddFilePrompt(groupChoices []string) []*survey.Question {
+func AddGroupPrompt() []*survey.Question {
 	return []*survey.Question{
+		{
+			Name:     "name",
+			Prompt:   &survey.Input{Message: "What is your group name?"},
+			Validate: survey.Required,
+		},
 		{
 			Name: "path",
 			Prompt: &survey.Input{
@@ -17,15 +22,8 @@ func AddFilePrompt(groupChoices []string) []*survey.Question {
 					files, _ := filepath.Glob(toComplete + "*")
 					return files
 				},
+				Help: "A group cannot be empty and at least contain one file",
 			},
-		},
-		{
-			Name: "group",
-			Prompt: &survey.MultiSelect{
-				Message: "Which groups this file should belong to?",
-				Options: groupChoices,
-			},
-			Validate: survey.Required,
 		},
 	}
 }

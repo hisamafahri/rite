@@ -6,7 +6,7 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/hisamafahri/rite/helper"
-	"github.com/hisamafahri/rite/model"
+	prompt "github.com/hisamafahri/rite/prompt/add"
 	"github.com/spf13/viper"
 )
 
@@ -49,7 +49,7 @@ func addFile() {
 	}
 
 	// perform the questions
-	err = survey.Ask(model.AddFilePrompt(groupChoices), &newFileDetails)
+	err = survey.Ask(prompt.AddFilePrompt(groupChoices), &newFileDetails)
 	helper.CheckErr(err)
 
 	for _, group := range newFileDetails.SelectedGroups {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/hisamafahri/rite/helper"
-	"github.com/hisamafahri/rite/model"
+	prompt "github.com/hisamafahri/rite/prompt/add"
 	"github.com/spf13/viper"
 )
 
@@ -17,7 +17,7 @@ func addGroup() {
 	}{}
 
 	// perform the questions
-	err := survey.Ask(model.AddGroupPrompt(), &groupDetails)
+	err := survey.Ask(prompt.AddGroupPrompt(), &groupDetails)
 	helper.CheckErr(err)
 
 	// Read the config file

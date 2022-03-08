@@ -3,7 +3,7 @@ package add
 import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/hisamafahri/rite/helper"
-	"github.com/hisamafahri/rite/model"
+	prompt "github.com/hisamafahri/rite/prompt/add"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var AddCmd = &cobra.Command{
 		}{}
 
 		// perform the questions
-		err := survey.Ask(model.AddPrompt(), &addType)
+		err := survey.Ask(prompt.AddPrompt(), &addType)
 		helper.CheckErr(err)
 
 		if addType.Type == "New Group" {

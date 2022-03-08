@@ -9,7 +9,7 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/hisamafahri/rite/helper"
-	"github.com/hisamafahri/rite/model"
+	prompt "github.com/hisamafahri/rite/prompt/add"
 	"github.com/spf13/viper"
 )
 
@@ -40,7 +40,7 @@ func addUser() {
 	}
 
 	// perform the questions
-	err = survey.Ask(model.AddUserPrompt(groupChoices), &userDetails)
+	err = survey.Ask(prompt.AddUserPrompt(groupChoices), &userDetails)
 	helper.CheckErr(err)
 
 	expirationLength, err := strconv.Atoi(userDetails.Expiration)
