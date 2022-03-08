@@ -17,7 +17,7 @@ func AddGroupPrompt() []*survey.Question {
 		{
 			Name: "path",
 			Prompt: &survey.Input{
-				Message: "Path to file:",
+				Message: "Path to file?",
 				Suggest: func(toComplete string) []string {
 					files, _ := filepath.Glob(toComplete + "*")
 					return files
