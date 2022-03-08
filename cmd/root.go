@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/hisamafahri/rite/cmd/add"
+	"github.com/hisamafahri/rite/cmd/remove"
 	"github.com/spf13/cobra"
 )
 
@@ -29,6 +30,9 @@ func init() {
 
 	// add the 'add' command
 	rootCmd.AddCommand(add.AddCmd)
+
+	// add the 'remove' command
+	rootCmd.AddCommand(remove.RemoveCmd)
 
 	// add the 'version' command
 	rootCmd.AddCommand(initCmd)
