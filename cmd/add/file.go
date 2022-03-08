@@ -2,12 +2,28 @@ package add
 
 import (
 	"errors"
+	"reflect"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/hisamafahri/rite/helper"
 	"github.com/hisamafahri/rite/model"
 	"github.com/spf13/viper"
 )
+
+func uniqueList(src interface{}) interface{} {
+	srcv := reflect.ValueOf(src)
+	dstv := reflect.MakeSlice(srcv.Type(), 0, 0)
+	visited := make(map[interface{}]struct{})
+	for i := 0; i < srcv.Len(); i++ {
+		elemv := srcv.Index(i)
+		if _, ok := visited[elemv.Interface()]; ok {
+			continue
+		}
+		visited[elemv.Interface()] = struct{}{}
+		dstv = reflect.Append(dstv, elemv)
+	}
+	return dstv.Interface()
+}
 
 func addFile() {
 	newFileDetails := struct {
@@ -40,9 +56,16 @@ func addFile() {
 		fileMembers := existGroups[group]
 		fileMembersSlice := fileMembers.([]interface{})
 
+		for _, file := range fileMembersSlice {
+			if file == newFileDetails.Path {
+				helper.CheckErr(errors.New("rite: file '" + newFileDetails.Path + "' is skipped because it's already member of '" + group + "' group"))
+			}
+		}
+
 		// append new email to the groupMembersSlice
 		fileMembers = append([]interface{}{newFileDetails.Path}, fileMembersSlice...)
-		existGroups[group] = fileMembers
+		uniqueList := uniqueList(fileMembers)
+		existGroups[group] = uniqueList
 	}
 
 	viper.Set("groups", existGroups)
