@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 
+	"github.com/hisamafahri/rite/cmd/add"
 	"github.com/spf13/cobra"
 )
 
@@ -27,7 +28,7 @@ func init() {
 	rootCmd.AddCommand(versionCmd)
 
 	// add the 'add' command
-	rootCmd.AddCommand(addUserCmd)
+	rootCmd.AddCommand(add.AddCmd)
 
 	// add the 'version' command
 	rootCmd.AddCommand(initCmd)
