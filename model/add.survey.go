@@ -11,7 +11,7 @@ func AddPrompt() []*survey.Question {
 			Name: "type",
 			Prompt: &survey.Select{
 				Message: "What you want to add?",
-				Options: []string{"New Groups", "New Files", "New User"},
+				Options: []string{"New Group", "New Files", "New User"},
 			},
 			Validate: survey.Required,
 		},

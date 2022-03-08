@@ -22,8 +22,8 @@ var AddCmd = &cobra.Command{
 		err := survey.Ask(model.AddPrompt(), &addType)
 		helper.CheckErr(err)
 
-		if addType.Type == "New Groups" {
-			fmt.Print("New Groups")
+		if addType.Type == "New Group" {
+			addGroup()
 		} else if addType.Type == "New Files" {
 			fmt.Println("new Files")
 		} else {
