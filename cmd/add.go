@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"io/ioutil"
 	"strconv"
 	"strings"
@@ -62,12 +61,6 @@ var addUserCmd = &cobra.Command{
 		_, err = key.ArmorPrivate(&expiration)
 		helper.CheckErr(err)
 
-		// save the public and private key to a .pgp file
-		ioutil.WriteFile(".rite/keys/"+strings.Replace(userDetails.Email, "@", ".", -1)+".public.gpg", key.Keyring(), 0666)
-		ioutil.WriteFile(strings.Replace(userDetails.Email, "@", ".", -1)+".private.gpg", key.Secring(&expiration), 0666)
-
-		// ====================
-
 		for _, selectedGroup := range userDetails.SelectedGroups {
 			// Read the config file
 			config, err := helper.LoadConfig()
@@ -76,28 +69,30 @@ var addUserCmd = &cobra.Command{
 			// load users from config
 			users := config.Users
 
-			// // check if group exist in config file
-			groupMembers, isGroupExist := users[selectedGroup]
+			// check if group exist in config file
+			currentMembers, isGroupHasMembers := users[selectedGroup]
 
-			// TODO: Fix error when group member empty
+			var groupMembers interface{}
+			var tempMembersSlice []string
 
-			// return error if group doesn't exist
-			if !isGroupExist {
-				helper.CheckErr(errors.New("rite: group " + selectedGroup + " doesn't exist in the 'users' section of the .rite/config.rite.yaml file"))
-				return
-			}
+			// if group name is not exist or have no member in the 'users' section
+			// create an empty string, and append on it
+			if !isGroupHasMembers {
+				tempMembersSlice = append(tempMembersSlice, userDetails.Email)
+				users[selectedGroup] = tempMembersSlice
+			} else {
+				groupMembers = currentMembers
+				// convert groupMembers into []interface{}
+				groupMembersSlice := currentMembers.([]interface{})
 
-			// convert groupMembers into []interface{}
-			groupMembersSlice := groupMembers.([]interface{})
+				// append new email to the groupMembersSlice
+				groupMembers = append([]interface{}{userDetails.Email}, groupMembersSlice...)
 
-			// append new email to the groupMembersSlice
-			groupMembers = append([]interface{}{userDetails.Email}, groupMembersSlice...)
-
-			for groupName := range users {
-				// fmt.Println("Received ID:", v, "index: ", i)
-				newMembers := groupMembers
-				if groupName == selectedGroup {
-					users[selectedGroup] = newMembers
+				for groupName := range users {
+					newMembers := groupMembers
+					if groupName == selectedGroup {
+						users[selectedGroup] = newMembers
+					}
 				}
 			}
 
@@ -109,6 +104,10 @@ var addUserCmd = &cobra.Command{
 
 			err = viper.WriteConfig()
 			helper.CheckErr(err)
+
+			// save the public and private key to a .pgp file
+			ioutil.WriteFile(".rite/keys/"+strings.Replace(userDetails.Email, "@", ".", -1)+".public.gpg", key.Keyring(), 0666)
+			ioutil.WriteFile(strings.Replace(userDetails.Email, "@", ".", -1)+".private.gpg", key.Secring(&expiration), 0666)
 		}
 	},
 }
