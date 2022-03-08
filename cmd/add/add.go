@@ -26,7 +26,7 @@ var AddCmd = &cobra.Command{
 			addGroup()
 		} else if addType.Type == "New Files" {
 			fmt.Println("new Files")
-		} else {
+		} else if addType.Type == "New User" {
 			addUser()
 		}
 	},
