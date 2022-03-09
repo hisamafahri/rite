@@ -22,8 +22,8 @@ var RemoveCmd = &cobra.Command{
 		err := survey.Ask(prompt.RemovePrompt(), &removeType)
 		helper.CheckErr(err)
 
-		if removeType.Type == "A Group" {
-			fmt.Println(removeType.Type)
+		if removeType.Type == "Groups" {
+			removeGroup()
 		} else if removeType.Type == "A File" {
 			fmt.Println(removeType.Type)
 		} else if removeType.Type == "A User" {

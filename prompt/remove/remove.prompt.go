@@ -11,7 +11,7 @@ func RemovePrompt() []*survey.Question {
 			Name: "type",
 			Prompt: &survey.Select{
 				Message: "What you want to remove?",
-				Options: []string{"A Group", "A File", "A User"},
+				Options: []string{"Groups", "A File", "A User"},
 			},
 			Validate: survey.Required,
 		},
