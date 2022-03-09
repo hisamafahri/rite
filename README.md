@@ -1,6 +1,6 @@
 # Rite
 
-Rite will help you to store secrets in your Git repository, safely.
+Rite will help you to store secrets in your git repository, safely.
 
 ## Documentation
 
