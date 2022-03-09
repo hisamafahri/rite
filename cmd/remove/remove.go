@@ -25,7 +25,7 @@ var RemoveCmd = &cobra.Command{
 		if removeType.Type == "Groups" {
 			removeGroup()
 		} else if removeType.Type == "A File" {
-			fmt.Println(removeType.Type)
+			removeFile()
 		} else if removeType.Type == "A User" {
 			fmt.Println(removeType.Type)
 		}
