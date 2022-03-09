@@ -2,6 +2,10 @@
 
 Rite will help you to store secrets in your Git repository, safely.
 
+## Documentation
+
+*Coming very soon...*
+
 ## Author
 
 [Hisam A Fahri](https://hisamafahri.com): [@hisamafahri](https://github.com/hisamafahri)
