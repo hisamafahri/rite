@@ -21,6 +21,9 @@ func removeGroup() {
 	// load groups from config
 	groupsList := config.Groups
 
+	// load users list
+	usersList := config.Users
+
 	// get the group names in the config file
 	var groupChoices []string
 	for groupName := range groupsList {
@@ -46,10 +49,14 @@ func removeGroup() {
 	// loop through the selected groups and delete the files
 	for _, selectedGroup := range groupDetails.Groups {
 		_, isGroupExist := groupsList[selectedGroup]
+		_, isUsersExist := usersList[selectedGroup]
 
 		// making sure the group is exist
 		if isGroupExist {
 			delete(viper.Get("groups").(map[string]interface{}), selectedGroup)
+			if isUsersExist {
+				delete(viper.Get("users").(map[string]interface{}), selectedGroup)
+			}
 		}
 	}
 
