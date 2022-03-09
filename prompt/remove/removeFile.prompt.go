@@ -5,13 +5,21 @@ import (
 )
 
 // the questions to ask
-func RemoveFilePrompt(fileList []string) []*survey.Question {
+func RemoveFilePrompt(fileChoices []string, groupChoices []string) []*survey.Question {
 	return []*survey.Question{
 		{
 			Name: "file",
 			Prompt: &survey.Select{
 				Message: "Which file you want to remove?",
-				Options: fileList,
+				Options: fileChoices,
+			},
+			Validate: survey.Required,
+		},
+		{
+			Name: "group",
+			Prompt: &survey.MultiSelect{
+				Message: "From which groups you want to delet that file?",
+				Options: groupChoices,
 			},
 			Validate: survey.Required,
 		},
