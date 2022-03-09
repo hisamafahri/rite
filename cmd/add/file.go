@@ -72,7 +72,4 @@ func addFile() {
 
 	err = viper.WriteConfig()
 	helper.CheckErr(err)
-
-	err = viper.WriteConfig()
-	helper.CheckErr(err)
 }

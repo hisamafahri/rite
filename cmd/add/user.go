@@ -110,9 +110,6 @@ func addUser() {
 		err = viper.WriteConfig()
 		helper.CheckErr(err)
 
-		err = viper.WriteConfig()
-		helper.CheckErr(err)
-
 		// save the public and private key to a .pgp file
 		ioutil.WriteFile(".rite/keys/"+strings.Replace(userDetails.Email, "@", ".", -1)+".public.gpg", key.Keyring(), 0666)
 		ioutil.WriteFile(strings.Replace(userDetails.Email, "@", ".", -1)+".private.gpg", key.Secring(&expiration), 0666)
